@@ -22,12 +22,12 @@ const SignUpForm = ({onCreateAccount}:signUpFormProps) => {
           <div className="mb-3 input-div">
             <label className="form-label">Password</label>
             <input {...register("password",{required:true})} className="form-control" id="password"/>
-            {errors.password&&<span >Please enter a password.</span>}
+            {errors.password&&<span > Please enter a password. </span>}
           </div>
                
           <div className="mb-3 button-div ">
             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" className="btn btn-primary ms-2"> Create Account </button>
+            <button type="submit" className="btn btn-primary ms-2">   Create Account </button>
           </div>
         </form>
         
