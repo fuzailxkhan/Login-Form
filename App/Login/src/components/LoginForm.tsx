@@ -22,7 +22,7 @@ const LoginForm = ({onLogin}:LoginFormProp) => {
           <div className="mb-3 input-div">
             <label className="form-label">Password</label>
             <input {...register("password",{required:true})} className="form-control" id="password"/>
-            {errors.password&&<span >Please enter a password.</span>}
+            {errors.password&&<span > Please enter a password. </span>}
           </div>
                
           <div className="mb-3 button-div ">
