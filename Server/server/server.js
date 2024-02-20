@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const secret_key = "RimshaAnwar4ever"
 
 const app = express();
 app.use(express.json());
@@ -34,8 +37,11 @@ app.post("/createAccount",async (req,res)=>{
         const salt = await bcrypt.genSalt(10);
         const pass = await bcrypt.hash(req.body.password,salt);
         const newUser = userSchema({email:req.body.email,password:pass});
-        await newUser.save()
-        res.status(200).json({"Message":"New Account Created on "+newUser.email,"user":newUser});
+        const savedUser = await newUser.save()
+        console.log(savedUser);
+        const token = jwt.sign({id:savedUser.id,email:savedUser.email},secret_key)
+
+        res.status(200).json({"Message":"New Account Created on "+newUser.email,"token":token});
         
     }   
     else{
