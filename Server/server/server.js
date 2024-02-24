@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const userSchema = require('./schema/schema');
 
-const secret_key = "RimshaAnwar4ever"
+const secret_key = "RimshaAnwar4Ever"
 
 const app = express();
 app.use(express.json());
