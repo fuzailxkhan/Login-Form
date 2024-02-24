@@ -22,7 +22,7 @@ mongoose.connect('mongodb+srv://fuzail:spiderman123@cluster0.1ig1y1c.mongodb.net
 
 const db = mongoose.connection;
 db.on('error',console.error.bind(console,'MongoDb Connection Error:'))
-db.once('open',()=>console.log("MongoDB connected Successfully"))
+db.once('open',()=>console.log("MongoDB connected Successfully "))
 
 
 const emailFind=async(email)=>{
