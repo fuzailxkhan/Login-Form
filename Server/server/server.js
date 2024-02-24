@@ -56,7 +56,7 @@ app.post("/loginAccount",async (req,res)=>{
     const foundUser = await emailFind(req.body.email);
     if(bcrypt.compare(req.body.password,foundUser[0].password)){
         var token = jwt.sign({uid:foundUser[0].id,role:foundUser[0].role}, secret_key, {expiresIn:'1h'});
-        res.status(200).cookie("x-jwt-token",token ,{expires:new Date(Date.now()+ 3*24*60*60*1000),httpOnly:true}).json({"Message":"You are Logged in"})
+        res.status(200).cookie("x-jwt-token",token ,{expires:new Date(Date.now()+ 3*24*60*60*1000),httpOnly:true}).json({"Message":"You are Logged in "})
     }
     else{
         res.status(200).json({"Message":"Incorrect Password"})
