@@ -14,21 +14,31 @@ const App = () => {
     const [serverResponse,setServerResponse] = useState("");
     const [loginData,setLoginData] = useState<FieldValues>();
     const [sendLogin,setSendLogin] = useState(false);
-    const [role,setRole] = useState("");
+    const [role,setRole] = useState("Guest");
+
+    const timeoutFunction = () =>{
+      setTimeout(()=>{
+        setServerResponse('')
+      },1000)
+    }
 
     useEffect(()=>{
       const controller = new AbortController();
 
+      axios.get('http://localhost:3000/profile', {signal:controller.signal,withCredentials: true})
+      .then(res=>{console.log(res);setRole(res.data.role)});
+
+    },[])
+
+    useEffect(()=>{
+      const controller = new AbortController();
       if(sendCreateAcc){
         axios.post("http://localhost:3000/createAccount",createAccData,{signal:controller.signal})
-        .then(res=>{console.log(res);setServerResponse(res.data.Message);})
+        .then(res=>{console.log(res);setServerResponse(res.data.Message);timeoutFunction();})
         .catch(err=>console.log(err))
         .finally(()=>{setSendCreateAcc(false);})
         console.log(createAccData)
       }
-
-      
-      
       return ()=>controller.abort();
     },[sendCreateAcc])
 
@@ -36,8 +46,8 @@ const App = () => {
       const controller = new AbortController();
 
       if(sendLogin){
-        axios.post("http://localhost:3000/loginAccount",loginData,{signal:controller.signal})
-        .then(res=>{console.log(res);setServerResponse(res.data.Message);const token = jwtDecode<{uid:string,role:string}>(res.data.token) ;setRole(token.role)})
+        axios.post("http://localhost:3000/loginAccount",loginData,{signal:controller.signal,withCredentials: true})
+        .then(res=>{console.log(res);setServerResponse(res.data.Message);timeoutFunction();setRole(res.data.role)})
         .catch(err=>console.log(err))
         .finally(()=>{setSendLogin(false);})
         console.log(loginData)
@@ -48,14 +58,24 @@ const App = () => {
     },[loginData])
 
     const handleButton = () =>{
-      axios.post("http://localhost:3000/addProduct")
+      axios.post("http://localhost:3000/addProduct",{},{withCredentials: true})
       
     }
+
+    const handleLogout = async () => {
+      try {
+        await axios.post('http://localhost:3000/logout',{},{withCredentials: true});
+        setRole('Guest');
+        setServerResponse('');
+      } catch (err) {
+        console.error('Logout failed:', err);
+      }
+    };
 
     
   return (
     <>
-      <Navbar role={role}/>
+      <Navbar role={role} handleLogout={handleLogout}/>
       <div className="background-div">
         <div className="main-div">
           <SignUpModal onCreateAccount={(data)=>{setCreateAccData(data);setSendCreateAcc(true);}} serverResponse={serverResponse}/>

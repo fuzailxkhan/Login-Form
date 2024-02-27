@@ -1,9 +1,14 @@
 
 interface NavbarProps{
   role:string;
+  handleLogout : () =>void;
 }
 
-const Navbar = ({role}:NavbarProps) => {
+const Navbar = ({role,handleLogout}:NavbarProps) => {
+
+
+
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
@@ -38,13 +43,13 @@ const Navbar = ({role}:NavbarProps) => {
             <form className="d-flex" role="search">
               <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
             </form>
-          </div>{role.length==0&&
+          </div>{role=="Guest"&&
                 <><button className="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#signUpModal" >Sign Up</button>
                 <button className="btn btn-light border border-dark"  data-bs-toggle="modal" data-bs-target="#loginModal" > Login </button></>}
                 {role=="Admin"&&
-                <><p>Admin</p></>}
+                <><p>Admin</p><button className="btn btn-light border border-dark" onClick={handleLogout} >Logout</button></>}
                 {role=="User"&&
-                <><p>User</p></>}
+                <><p>User</p><button className="btn btn-light border border-dark" onClick={handleLogout}>Logout</button></>}
         </div>
       </nav>
     </div>

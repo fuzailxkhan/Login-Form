@@ -5,15 +5,19 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const bp = require("body-parser");
+const {jwtDecode} = require("jwt-decode");
+
+const authenticateToken = require('./middlewares/tokenMiddlewares')
 const userSchema = require('./schema/schema');
 
 const secret_key = "RimshaAnwar4Ever"
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({origin: 'http://localhost:5173',credentials: true}));
 app.use(cookieParser());
-
+app.use(bp.urlencoded({ extended: true }));
 
 
 mongoose.connect('mongodb+srv://fuzail:spiderman123@cluster0.1ig1y1c.mongodb.net/?retryWrites=true&w=majority')
@@ -52,22 +56,41 @@ app.post("/createAccount",async (req,res)=>{
 
 
 app.post("/loginAccount",async (req,res)=>{
-    console.log(req.body);
+    console.log(req.body,req.cookies);
     const foundUser = await emailFind(req.body.email);
     if(bcrypt.compare(req.body.password,foundUser[0].password)){
         var token = jwt.sign({uid:foundUser[0].id,role:foundUser[0].role}, secret_key, {expiresIn:'1h'});
-        res.status(200).cookie("x-jwt-token",token ,{expires:new Date(Date.now()+ 3*24*60*60*1000),httpOnly:true}).json({"Message":"You are Logged in"})
+        res.status(200).cookie("x-jwt-token",token,{httpOnly:true,secure:true,sameSite:'strict'}).json({Message:"Logged In",role:foundUser[0].role})    
     }
     else{
         res.status(200).json({"Message":"Incorrect Password"})
     }
 })
 
-app.post("/addProduct",async (req,res)=>{
-    console.log(req.cookies);
-    console.log(req.signedCookies);
+app.post("/addProduct",authenticateToken ,async (req,res)=>{
+    const token = req.cookies ;
+    console.log(token["x-jwt-token"]);
     res.json("Data Recieved");
 })
+
+app.get("/profile",async (req,res)=>{
+    console.log("Profile Route hit");
+    console.log(req.cookies);
+    try {
+
+        const decoded = jwtDecode(req.cookies['x-jwt-token'])
+        console.log(decoded);
+        res.json({"role":decoded.role})
+
+    } catch (error) {
+        res.json({role:"Guest"})
+    }
+})
+
+app.post('/logout', (req, res) => {
+    res.clearCookie('x-jwt-token', { httpOnly: true, sameSite: 'none', secure: true });
+    res.json({ message: 'Logout successful' });
+  });
 
 
 app.listen(3000,(err)=>{
