@@ -85,7 +85,7 @@ app.get("/profile",async (req,res)=>{
     } catch (error) {
         res.json({role:"Guest"})
     }
-}).
+})
 
 app.post('/logout', (req, res) => {
     res.clearCookie('x-jwt-token', { httpOnly: true, sameSite: 'none', secure: true });

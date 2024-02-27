@@ -1,3 +1,5 @@
+import "./Navbar.css"
+
 
 interface NavbarProps{
   role:string;
