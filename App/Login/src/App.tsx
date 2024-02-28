@@ -59,7 +59,7 @@ const App = () => {
 
     const handleButton = () =>{
       axios.post("http://localhost:3000/addProduct",{},{withCredentials: true})
-      
+      .then((res)=>console.log(res))
     }
 
     const handleLogout = async () => {
