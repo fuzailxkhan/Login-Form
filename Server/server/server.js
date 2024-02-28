@@ -69,8 +69,12 @@ app.post("/loginAccount",async (req,res)=>{
 
 app.post("/addProduct",authenticateToken ,async (req,res)=>{
     const token = req.cookies ;
-    console.log(token["x-jwt-token"]);
-    res.json("Data Recieved");
+    console.log("This is old TOken : " , token["x-jwt-token"]);
+    console.log("This is NewToken :" , req.newToken)
+    if (req.newToken){
+        return res.cookie("x-jwt-token",req.newToken,{httpOnly:true,secure:true,sameSite:'strict'}).json("Data Recieved and Token Renewed");
+    }
+    return res.json("Data Recieved");
 })
 
 app.get("/profile",async (req,res)=>{
