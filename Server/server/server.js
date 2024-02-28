@@ -30,14 +30,14 @@ db.once('open',()=>console.log("MongoDB connected Successfully"))
 
 
 const emailFind=async(email)=>{
-    const user = await userSchema.find({email:email});
+    const user = await userSchema.findOne({email:email});
     return user;
 }
 
 app.post("/createAccount",async (req,res)=>{
     console.log(req.body)
     const user = await emailFind(req.body.email);
-    if(user.length <=0){
+    if(!user){
         const salt = await bcrypt.genSalt(10);
         const pass = await bcrypt.hash(req.body.password,salt);
         const newUser = userSchema({email:req.body.email,password:pass,role:"User"});
@@ -58,9 +58,9 @@ app.post("/createAccount",async (req,res)=>{
 app.post("/loginAccount",async (req,res)=>{
     console.log(req.body,req.cookies);
     const foundUser = await emailFind(req.body.email);
-    if(bcrypt.compare(req.body.password,foundUser[0].password)){
-        var token = jwt.sign({uid:foundUser[0].id,role:foundUser[0].role}, secret_key, {expiresIn:'1h'});
-        res.status(200).cookie("x-jwt-token",token,{httpOnly:true,secure:true,sameSite:'strict'}).json({Message:"Logged In",role:foundUser[0].role})    
+    if(bcrypt.compare(req.body.password,foundUser.password)){
+        var token = jwt.sign({uid:foundUser.id,role:foundUser.role}, secret_key, {expiresIn:'1h'});
+        res.status(200).cookie("x-jwt-token",token,{httpOnly:true,secure:true,sameSite:'strict'}).json({Message:"Logged In",role:foundUser.role})    
     }
     else{
         res.status(200).json({"Message":"Incorrect Password"})
