@@ -7,7 +7,7 @@ interface NavbarProps{
   serverResponse:string;
 }
 
-const Navbar = ({role,handleLogout,serverResponse}:NavbarProps) => {
+const Navbar = ({role,handleLogout}:NavbarProps) => {
 
 
 
