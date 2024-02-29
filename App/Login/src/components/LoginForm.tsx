@@ -27,7 +27,7 @@ const LoginForm = ({onLogin}:LoginFormProp) => {
                
           <div className="mb-3 button-div ">
             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" className="btn btn-primary ms-2" data-bs-dismiss="modal">Login</button>
+            <button type="submit" className="btn btn-primary ms-2" >Login</button>
           </div>
         </form>
         

@@ -14,6 +14,7 @@ const App = () => {
     const [sendLogin,setSendLogin] = useState(false);
     const [role,setRole] = useState("Guest");
     const [alertData,setAlertData] = useState("");
+    const [serverResponse,setServerResponse] = useState("");
 
     const timeoutFunction = () =>{
       setTimeout(()=>{
@@ -46,7 +47,7 @@ const App = () => {
 
       if(sendLogin){
         axios.post("http://localhost:3000/loginAccount",loginData,{signal:controller.signal,withCredentials: true})
-        .then(res=>{console.log(res);setAlertData(res.data.Message);timeoutFunction();setRole(res.data.role)})
+        .then(res=>{console.log(res);setAlertData(res.data.Message);timeoutFunction();setRole(res.data.role);if(res.data.Message==="Incorrect Password")setServerResponse(res.data.Message);})
         .catch(err=>console.log(err))
         .finally(()=>{setSendLogin(false);})
         console.log(loginData)
@@ -83,7 +84,7 @@ const App = () => {
       <div className="background-div">
         <div className="main-div">
           <SignUpModal onCreateAccount={(data)=>{setCreateAccData(data);setSendCreateAcc(true);}} />
-          <LoginModal onLogin={(data)=>{setLoginData(data);setSendLogin(true);}}/> 
+          <LoginModal onLogin={(data)=>{setLoginData(data);setSendLogin(true);}} serverResponse={serverResponse}/> 
           <button className="btn btn-primary" onClick={handleButton} >Add Product</button>
           <button className="btn btn-primary" onClick={()=>{setAlertData("Hello");timeoutFunction();}}>Show Alert</button>
         </div>

@@ -3,11 +3,12 @@ import LoginForm from "./LoginForm"
 
 
 interface LoginModalProps{
-    onLogin :(data:FieldValues)=>void
+    onLogin :(data:FieldValues)=>void;
+    serverResponse:String;
 }
 
 
-const LoginModal = ({onLogin}:LoginModalProps) => {
+const LoginModal = ({onLogin,serverResponse}:LoginModalProps) => {
   return (
     <>
             <div className="modal fade" id="loginModal" data-bs-backdrop="static" tabIndex={-1} aria-labelledby="loginModalLabel" aria-hidden="true">
@@ -18,7 +19,7 @@ const LoginModal = ({onLogin}:LoginModalProps) => {
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
-                    <LoginForm onLogin={onLogin} />
+                    {serverResponse?<p>{serverResponse}</p>:<LoginForm onLogin={onLogin} />}
                 </div>
                 
                 </div>
