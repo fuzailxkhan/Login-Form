@@ -9,9 +9,6 @@ interface NavbarProps{
 
 const Navbar = ({role,handleLogout}:NavbarProps) => {
 
-
-
-
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
