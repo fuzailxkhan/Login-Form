@@ -6,7 +6,7 @@ const secret_key = "RimshaAnwar4Ever"
 const authenticateToken = (req,res,next)=>{
     const token = req.cookies["x-jwt-token"];
     console.log("Middleware executed")
-    if (!token) {console.log("Middleware If executed");return res.sendStatus(401)}
+    if (!token) {console.log("Middleware If executed");return res.json({Message:"You need to Login first"})}
 
     jwt.verify(token ,secret_key, (err , user)=>{
         console.log("Middleware JWT Verified executed")
@@ -21,7 +21,7 @@ const authenticateToken = (req,res,next)=>{
             }
             else{return res.status(403).json({Message:"An Error Occured, Please Logout and Login again."})}
         };
-        
+
         next();
     } )
 }

@@ -5,10 +5,9 @@ import SignUpForm from "./SignUpForm"
 
 interface SignUpModalProps{
     onCreateAccount:(data:FieldValues)=>void
-    serverResponse:string;
 }
 
-const SignUpModal = ({onCreateAccount,serverResponse}:SignUpModalProps) => {
+const SignUpModal = ({onCreateAccount}:SignUpModalProps) => {
 
     
 
@@ -23,7 +22,7 @@ const SignUpModal = ({onCreateAccount,serverResponse}:SignUpModalProps) => {
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
-                    {serverResponse.length!=0?<p>{serverResponse}</p>:<SignUpForm onCreateAccount={onCreateAccount} />}
+                    <SignUpForm onCreateAccount={onCreateAccount} />
                 </div>
                 
                 </div>

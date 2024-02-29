@@ -5,21 +5,20 @@ import { FieldValues } from "react-hook-form"
 import axios from "axios"
 import SignUpModal from "./components/SignUpModal"
 import LoginModal from "./components/LoginModal"
-import { jwtDecode } from "jwt-decode"
-
+import Alert from "./components/Alert"
 const App = () => {
 
     const [createAccData,setCreateAccData] = useState<FieldValues>()
     const [sendCreateAcc,setSendCreateAcc]=useState(false);
-    const [serverResponse,setServerResponse] = useState("");
     const [loginData,setLoginData] = useState<FieldValues>();
     const [sendLogin,setSendLogin] = useState(false);
     const [role,setRole] = useState("Guest");
+    const [alertData,setAlertData] = useState("");
 
     const timeoutFunction = () =>{
       setTimeout(()=>{
-        setServerResponse('')
-      },1000)
+        setAlertData('');
+      },2000)
     }
 
     useEffect(()=>{
@@ -34,7 +33,7 @@ const App = () => {
       const controller = new AbortController();
       if(sendCreateAcc){
         axios.post("http://localhost:3000/createAccount",createAccData,{signal:controller.signal})
-        .then(res=>{console.log(res);setServerResponse(res.data.Message);timeoutFunction();})
+        .then(res=>{console.log(res);setAlertData(res.data.Message);timeoutFunction();})
         .catch(err=>console.log(err))
         .finally(()=>{setSendCreateAcc(false);})
         console.log(createAccData)
@@ -47,7 +46,7 @@ const App = () => {
 
       if(sendLogin){
         axios.post("http://localhost:3000/loginAccount",loginData,{signal:controller.signal,withCredentials: true})
-        .then(res=>{console.log(res);setServerResponse(res.data.Message);timeoutFunction();setRole(res.data.role)})
+        .then(res=>{console.log(res);setAlertData(res.data.Message);timeoutFunction();setRole(res.data.role)})
         .catch(err=>console.log(err))
         .finally(()=>{setSendLogin(false);})
         console.log(loginData)
@@ -57,16 +56,20 @@ const App = () => {
       return ()=>controller.abort();
     },[loginData])
 
-    const handleButton = () =>{
-      axios.post("http://localhost:3000/addProduct",{},{withCredentials: true})
-      .then((res)=>console.log(res))
+    const handleButton = async () =>{
+      
+      await axios.post("http://localhost:3000/addProduct",{},{withCredentials: true})
+      .then((res)=>{setAlertData(res.data.Message);timeoutFunction()})
+      .catch(err=>{if(err.response){console.log("You need to login first")}})
+      .finally()
+      
     }
 
     const handleLogout = async () => {
       try {
         await axios.post('http://localhost:3000/logout',{},{withCredentials: true});
         setRole('Guest');
-        setServerResponse('');
+        setAlertData('');
       } catch (err) {
         console.error('Logout failed:', err);
       }
@@ -75,12 +78,14 @@ const App = () => {
     
   return (
     <>
+      <Alert alertData={alertData}/>
       <Navbar role={role} handleLogout={handleLogout}/>
       <div className="background-div">
         <div className="main-div">
-          <SignUpModal onCreateAccount={(data)=>{setCreateAccData(data);setSendCreateAcc(true);}} serverResponse={serverResponse}/>
-          <LoginModal onLogin={(data)=>{setLoginData(data);setSendLogin(true);}} serverResponse={serverResponse}/> 
-          <button onClick={handleButton} />
+          <SignUpModal onCreateAccount={(data)=>{setCreateAccData(data);setSendCreateAcc(true);}} />
+          <LoginModal onLogin={(data)=>{setLoginData(data);setSendLogin(true);}}/> 
+          <button className="btn btn-primary" onClick={handleButton} >Add Product</button>
+          <button className="btn btn-primary" onClick={()=>{setAlertData("Hello");timeoutFunction();}}>Show Alert</button>
         </div>
       </div>
     </>

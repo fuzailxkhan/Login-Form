@@ -1,0 +1,19 @@
+.alert{
+    margin-bottom: 0;
+    position: fixed;
+    top:-100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index:9999;
+    transition: top 0.5s ease-in-out;
+    padding-left: 25px;
+    padding-right:25px;
+}
+
+.isVisible{
+    top:0;
+}
+
+.isNotVisible{
+    top:-100px;
+}

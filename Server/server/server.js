@@ -58,23 +58,24 @@ app.post("/createAccount",async (req,res)=>{
 app.post("/loginAccount",async (req,res)=>{
     console.log(req.body,req.cookies);
     const foundUser = await emailFind(req.body.email);
-    if(bcrypt.compare(req.body.password,foundUser.password)){
+    console.log(foundUser);
+    if(foundUser.length > 0 && bcrypt.compare(req.body.password,foundUser.password)){
         var token = jwt.sign({uid:foundUser.id,role:foundUser.role}, secret_key, {expiresIn:'1h'});
         res.status(200).cookie("x-jwt-token",token,{httpOnly:true,secure:true,sameSite:'strict'}).json({Message:"Logged In",role:foundUser.role})    
     }
     else{
-        res.status(200).json({"Message":"Incorrect Password"})
+        res.status(200).json({Message:"Incorrect Password"})
     }
 })
 
 app.post("/addProduct",authenticateToken ,async (req,res)=>{
     const token = req.cookies ;
     console.log("This is old TOken : " , token["x-jwt-token"]);
-    console.log("This is NewToken :" , req.newToken)
     if (req.newToken){
+        console.log("This is NewToken :" , req.newToken)
         return res.cookie("x-jwt-token",req.newToken,{httpOnly:true,secure:true,sameSite:'strict'}).json("Data Recieved and Token Renewed");
     }
-    return res.json("Data Recieved");
+    return res.json({Message:"Data Recieved"});
 })
 
 app.get("/profile",async (req,res)=>{
