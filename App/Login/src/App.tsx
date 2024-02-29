@@ -47,7 +47,7 @@ const App = () => {
 
       if(sendLogin){
         axios.post("http://localhost:3000/loginAccount",loginData,{signal:controller.signal,withCredentials: true})
-        .then(res=>{console.log(res);setAlertData(res.data.Message);timeoutFunction();setRole(res.data.role);if(res.data.Message==="Incorrect Password")setServerResponse(res.data.Message);})
+        .then(res=>{console.log(res);setAlertData(res.data.Message);timeoutFunction();setRole(res.data.role);if(res.data.Message==="Incorrect Password")setServerResponse(res.data.Message);setRole("Guest")})
         .catch(err=>console.log(err))
         .finally(()=>{setSendLogin(false);})
         console.log(loginData)
@@ -80,7 +80,7 @@ const App = () => {
   return (
     <>
       <Alert alertData={alertData}/>
-      <Navbar role={role} handleLogout={handleLogout}/>
+      <Navbar role={role} handleLogout={handleLogout} serverResponse={serverResponse}/>
       <div className="background-div">
         <div className="main-div">
           <SignUpModal onCreateAccount={(data)=>{setCreateAccData(data);setSendCreateAcc(true);}} />

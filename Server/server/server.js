@@ -59,7 +59,8 @@ app.post("/loginAccount",async (req,res)=>{
     console.log(req.body,req.cookies);
     const foundUser = await emailFind(req.body.email);
     console.log(foundUser);
-    if(foundUser.length > 0 && bcrypt.compare(req.body.password,foundUser.password)){
+    if (!foundUser) return res.status(200).json({Message:"No Account Found"})
+    if(bcrypt.compare(req.body.password,foundUser.password)){
         var token = jwt.sign({uid:foundUser.id,role:foundUser.role}, secret_key, {expiresIn:'1h'});
         res.status(200).cookie("x-jwt-token",token,{httpOnly:true,secure:true,sameSite:'strict'}).json({Message:"Logged In",role:foundUser.role})    
     }

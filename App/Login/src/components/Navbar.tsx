@@ -4,9 +4,10 @@ import "./Navbar.css"
 interface NavbarProps{
   role:string;
   handleLogout : () =>void;
+  serverResponse:string;
 }
 
-const Navbar = ({role,handleLogout}:NavbarProps) => {
+const Navbar = ({role,handleLogout,serverResponse}:NavbarProps) => {
 
 
 
