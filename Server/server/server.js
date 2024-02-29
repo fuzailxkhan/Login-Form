@@ -94,6 +94,7 @@ app.get("/profile",async (req,res)=>{
 })
 
 app.post('/logout', (req, res) => {
+    console.log("Logout ROute hit")
     res.clearCookie('x-jwt-token', { httpOnly: true, sameSite: 'none', secure: true });
     res.json({ message: 'Logout successful' });
   });
