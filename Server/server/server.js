@@ -66,6 +66,7 @@ app.post("/createAccount", async (req, res) => {
 
 const passwordCheck = async (enteredPassword, savedPassword) => {
   const bool = await bcrypt.compare(enteredPassword, savedPassword);
+  console.log(bool?"I say Correct Password":"I Say Wrong Password")
   return bool;
 };
 
