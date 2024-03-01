@@ -47,7 +47,7 @@ const App = () => {
 
       if(sendLogin){
         axios.post("http://localhost:3000/loginAccount",loginData,{signal:controller.signal,withCredentials: true})
-        .then(res=>{console.log(res);setAlertData(res.data.Message);timeoutFunction();setRole(res.data.role);if(res.data.Message==="Incorrect Password")setServerResponse(res.data.Message);setRole("Guest")})
+        .then(res=>{console.log(res);setAlertData(res.data.Message);timeoutFunction();setRole(res.data.role);if(res.data.Message==="Incorrect Password"){setServerResponse(res.data.Message);setRole("Guest")}})
         .catch(err=>console.log(err))
         .finally(()=>{setSendLogin(false);})
         console.log(loginData)

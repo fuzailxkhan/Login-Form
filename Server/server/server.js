@@ -91,6 +91,7 @@ app.post("/loginAccount", async (req, res) => {
       })
       .json({ Message: "Logged In", role: foundUser.role });
   } else {
+    console.log("Password is Incorrect")
     res.status(200).json({ Message: "Incorrect Password" });
   }
 });
