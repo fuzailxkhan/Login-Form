@@ -1,1 +1,3 @@
-Built a Login Form using JWT Authentication Tokens 
+Built a Login Form using:
+ JWT Authentication Tokens
+ bcrypt 
