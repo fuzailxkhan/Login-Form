@@ -26,5 +26,10 @@ const authenticateToken = (req,res,next)=>{
     } )
 }
 
+const isAdmin = (req,res,next)=>{
+
+
+}
+
 
 module.exports = authenticateToken;
