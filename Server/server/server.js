@@ -11,7 +11,7 @@ const {jwtDecode} = require("jwt-decode");
 const authenticateToken = require('./middlewares/tokenMiddlewares')
 const userSchema = require('./schema/schema');
 
-const secret_key = "RimshaAnwar4Ever"
+const secret_key;
 
 const app = express();
 app.use(express.json());
